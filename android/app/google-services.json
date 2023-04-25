@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "867475659008",
+    "project_id": "myteam-b79d1",
+    "storage_bucket": "myteam-b79d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867475659008:android:b5fa4fba5378f86410fbe5",
+        "android_client_info": {
+          "package_name": "com.kimdane.myteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867475659008-equ08tjo3hpa32qvbl63mg6f8705s3ns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChMiwpa4zVSQFw0IXMfnCBcIqk89ew_nc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867475659008-equ08tjo3hpa32qvbl63mg6f8705s3ns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
