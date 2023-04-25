@@ -5,6 +5,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:myteam/data/user.dart';
 
+enum Admin { TeamAdmin, TeamMember }
+
 class SignPage extends StatefulWidget {
   const SignPage({Key? key}) : super(key: key);
 
@@ -21,6 +23,9 @@ class _SignPage extends State<SignPage> {
   TextEditingController? _idTextController;
   TextEditingController? _pwTextController;
   TextEditingController? _pwCheckTextController;
+  TextEditingController? _teamNameTextController;
+
+  Admin? _admin;
 
   @override
   void initState() {
@@ -28,6 +33,8 @@ class _SignPage extends State<SignPage> {
     _idTextController = TextEditingController();
     _pwTextController = TextEditingController();
     _pwCheckTextController = TextEditingController();
+    _teamNameTextController = TextEditingController();
+    _admin = Admin.TeamMember;
 
     _database = FirebaseDatabase(databaseURL: _databaseURL);
     reference = _database?.reference().child('user');
@@ -69,6 +76,46 @@ class _SignPage extends State<SignPage> {
       ),
     );
   }
+
+  TextField editSignTextTeamName() {
+    return TextField(
+      controller: _teamNameTextController,
+      maxLines: 1,
+      decoration: const InputDecoration(
+          labelText: '팀명',
+          border: OutlineInputBorder()
+      ),
+    );
+  }
+
+  Row selectTeamAdmin() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+            child: RadioListTile(
+                title: const Text("팀원"),
+                value: Admin.TeamMember,
+                groupValue: _admin,
+                onChanged: (value) {
+                  setState(() {
+                    _admin = value;
+                  });
+                })),
+        Expanded(
+            child: RadioListTile(
+                title: const Text("팀관리자"),
+                value: Admin.TeamAdmin,
+                groupValue: _admin,
+                onChanged: (value) {
+                  setState(() {
+                    _admin = value;
+                  });
+                }))
+      ],
+    );
+  }
+
   void makeDialog(String text) {
     showDialog(
         context: context,
@@ -90,7 +137,7 @@ class _SignPage extends State<SignPage> {
                 .child(_idTextController!.value.text)
                 .push()
                 .set(User(_idTextController!.value.text,
-                    digest.toString(), DateTime.now().toIso8601String())
+                    digest.toString(), _teamNameTextController!.value.text, DateTime.now().toIso8601String(), _admin!.index)
                     .toJson())
                 .then((_) {
                   Navigator.of(context).pop();
@@ -116,9 +163,11 @@ class _SignPage extends State<SignPage> {
         title: Text('회원가입'),
       ),
       body: Container(
-        child: Center(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
                 width: 200,
@@ -135,8 +184,19 @@ class _SignPage extends State<SignPage> {
                 child: editSignTextPWcheck(),
               ),
               const SizedBox(height: 20,),
-              buttonSign()
+              SizedBox(
+                width: 200,
+                child: editSignTextTeamName(),
+              ),
+              const SizedBox(height: 5,),
+              SizedBox(
+                width: 300,
+                child: selectTeamAdmin(),
+              ),
+              const SizedBox(height: 10,),
+              buttonSign(),
             ],),
-        ),),);
+        ),
+    ),);
   }
 }

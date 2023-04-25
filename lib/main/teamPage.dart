@@ -31,7 +31,7 @@ class _TeamPage extends State<TeamPage> {
 
     _database = FirebaseDatabase(databaseURL: _databaseURL);
     reference = _database!.reference().child("member");
-    _collectionRef = FirebaseFirestore.instance.collection('borrusia');
+    _collectionRef = FirebaseFirestore.instance.collection('team');
 
     _numTextController = TextEditingController();
     _nameTextController = TextEditingController();
@@ -202,6 +202,8 @@ class _TeamPage extends State<TeamPage> {
   void addFireStore() async {
     var mem = Member(_numTextController?.text, _nameTextController?.text, _positionTextController?.text, DateTime.now().toIso8601String());
     await _collectionRef!
+        .doc("borussia")
+        .collection("member")
         .doc(_nameTextController?.text)
         .set(mem.toJson());
 
@@ -211,7 +213,7 @@ class _TeamPage extends State<TeamPage> {
   }
 
   void getFireStore() async {
-    QuerySnapshot result = await _collectionRef!.get();
+    QuerySnapshot result = await _collectionRef!.doc("borussia").collection("member").get();
     final allData = result.docs.map((doc) => doc.data()).toList();
 
     print("allData : ${allData}");
