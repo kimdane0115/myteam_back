@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'data/user.dart';
 import 'main/teamPage.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,12 +14,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin{
   TabController? controller;
-  String? loginId;
+  // String? loginId;
+  User? user;
 
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 3, vsync: this);
+    controller = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -29,14 +31,17 @@ class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    loginId = ModalRoute.of(context)!.settings.arguments as String?;
+    // loginId = ModalRoute.of(context)!.settings.arguments as String?;
+    user = ModalRoute.of(context)!.settings.arguments as User?;
+    print("user : ${user?.id}, ${user?.teamName}, ${user?.adminFlag}");
     return Scaffold(
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          TeamPage(loginId: loginId!),
-          TeamPage(loginId: loginId!),
-          TeamPage(loginId: loginId!)
+          TeamPage(loginId: user?.id, teamName: user?.teamName),
+          TeamPage(loginId: user?.id!),
+          TeamPage(loginId: user?.id!),
+          TeamPage(loginId: user?.id!)
         ],
       ),
       bottomNavigationBar: TabBar(
@@ -45,7 +50,10 @@ class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin{
             icon: Icon(Icons.list),
           ),
           Tab(
-            icon: Icon(Icons.list),
+            icon: Icon(Icons.history),
+          ),
+          Tab(
+            icon: Icon(Icons.event),
           ),
           Tab(
             icon: Icon(Icons.settings),

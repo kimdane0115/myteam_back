@@ -111,7 +111,10 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin{
                           var digest = sha1.convert(bytes);
                           if (user.pw == digest.toString()) {
                             // makeDialog('아이디가 확인되었습니다. 로그인 준비중입니다.');
-                            Navigator.of(context).pushReplacementNamed('/main', arguments: _idTextController!.value.text);
+                            print("teamName : ${user.teamName}");
+                            // Navigator.of(context).pushReplacementNamed('/main', arguments: _idTextController!.value.text, user.teamName);
+                            // Navigator.of(context).pushReplacementNamed('/main', arguments: user);
+                            Navigator.of(context).pushNamed('/main', arguments: user);
                           } else {
                             makeDialog('비밀번호가 틀립니다');
                           }

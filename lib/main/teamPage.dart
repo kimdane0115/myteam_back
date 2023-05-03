@@ -7,7 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TeamPage extends StatefulWidget {
   // const TeamPage({Key? key}) : super(key: key);
   final String? loginId;
-  const TeamPage({super.key, this.loginId});
+  final String? teamName;
+  const TeamPage({super.key, this.loginId, this.teamName});
 
   @override
   State<TeamPage> createState() => _TeamPage();
@@ -49,6 +50,9 @@ class _TeamPage extends State<TeamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('${widget.teamName} 선수 리스트'),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,7 +206,7 @@ class _TeamPage extends State<TeamPage> {
   void addFireStore() async {
     var mem = Member(_numTextController?.text, _nameTextController?.text, _positionTextController?.text, DateTime.now().toIso8601String());
     await _collectionRef!
-        .doc("borussia")
+        .doc(widget.teamName)
         .collection("member")
         .doc(_nameTextController?.text)
         .set(mem.toJson());
@@ -213,7 +217,7 @@ class _TeamPage extends State<TeamPage> {
   }
 
   void getFireStore() async {
-    QuerySnapshot result = await _collectionRef!.doc("borussia").collection("member").get();
+    QuerySnapshot result = await _collectionRef!.doc(widget.teamName).collection("member").get();
     final allData = result.docs.map((doc) => doc.data()).toList();
 
     print("allData : ${allData}");
